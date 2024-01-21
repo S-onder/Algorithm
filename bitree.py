@@ -79,13 +79,9 @@ def level_order(root):
 
 
 if __name__ == '__main__':
-    # print(root.data) #根节点
-    # print(root.rchild.rchild.data) 某一部分节点
-    # pre_order(root) #前序遍历二叉树
-    # in_order(root) #中序遍历二叉树
-    # post_oder(root) #后序遍历二叉树
-    # level_order(root) #层次遍历二叉树
-
-    
-
-    
+    print(root.data) #根节点
+    print(root.rchild.rchild.data) #某一部分节点
+    pre_order(root) #前序遍历二叉树
+    in_order(root) #中序遍历二叉树
+    post_oder(root) #后序遍历二叉树
+    level_order(root) #层次遍历二叉树
