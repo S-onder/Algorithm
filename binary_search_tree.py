@@ -120,6 +120,76 @@ class BST:
                 return p.val
         #若p是空的，返回None
         return None
+    
+    def __remove_node_1(self, node):
+        """
+        情况（1）删除是叶子节点的节点
+        node : 要删除的节点
+        """
+        if not node.parent:
+            #该节点无父节点：只有一个节点的树
+            self.root = None
+        if node == node.parent.left: #当前节点是其父亲节点的左节点
+            node.parent.left = None
+        else: #当前节点是其父亲节点的右节点
+            node.parent.right = None
+
+    def __remove_node_2_1(self, node):
+        """
+        情况（2）删除有一个叶子节点的节点(只有一个左孩子节点)
+        node : 要删除的节点
+        """
+        if not node.parent:
+            #当前节点是根节点
+            self.root = node.left
+            node.left.parent = None
+        elif node == node.parent.left: #当前节点是其父节点的左孩子节点
+            node.parent.left = node.left
+            node.left.parent = node.parent
+        else:#当前节点是其父节点的右孩子节点
+            node.parent.right = node.left
+            node.left.parent = node.parent
+
+    def __remove_node_2_2(self, node):
+        """
+        情况（2）删除有一个叶子节点的节点(只有一个右孩子节点)
+        node : 要删除的节点
+        """
+        if not node.parent:
+            self.root = node.right
+            node.right.parent = None
+        elif node == node.parent.left:
+            node.parent.left = node.right
+            node.right.parent = node.parent
+        else:
+            node.parent.right = node.right
+            node.right.parent = node.parent
+            
+
+    def delete(self, val):
+        """
+        删除操作(先找节点，再删除)
+        分为三种情况：
+        （1）删除是叶子节点的节点
+        （2）删除有一个叶子节点的节点
+        （3）删除有两个叶子节点的节点
+        """
+        if self.root: #不是空树
+            node = self.query_(val) #找到要删除值的节点
+            if not node: #不存在这样的值
+                return False
+            if not node.left and not node.right:
+                #情况（1）是叶子节点
+                self.__remove_node_1(node)
+            # 情况（2）有一个叶子节点的节点
+            elif not node.right:#只有左孩子节点
+                self.__remove_node_2_1(node)
+            elif not node.left:#只有右孩子节点
+                self.__remove_node_2_2(node)
+            else:
+                # 情况（3）有两个叶子节点的节点
+                pass
+
 
 
             
