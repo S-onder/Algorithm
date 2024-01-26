@@ -29,11 +29,11 @@ class BST:
         if not node:
             #如果该节点为空：到最底下了
             node = BiTreeNode(val) #创建该节点
-        elif val < node.data:
+        elif val < node.val:
             # 要插入的值，小于当前插入节点的值
             node.left = self.insert(node.left, val) # 希望能插入到左叶子结点去
             node.left.parent = node
-        elif val > node.data:
+        elif val > node.val:
             # 要插入的值，大于当前插入节点的值
             node.right = self.insert(node.right, val) #希望能插入到右叶子结点去
             node.right.parent = node
@@ -117,7 +117,7 @@ class BST:
             elif p.val > val:
                 p = p.left
             else:
-                return p.val
+                return p
         #若p是空的，返回None
         return None
     
@@ -172,7 +172,7 @@ class BST:
         分为三种情况：
         （1）删除是叶子节点的节点
         （2）删除有一个叶子节点的节点
-        （3）删除有两个叶子节点的节点
+        （3）删除有两个叶子节点的节点 : 将其右子树最小节点删除，并用其替换当前节点
         """
         if self.root: #不是空树
             node = self.query_(val) #找到要删除值的节点
@@ -188,7 +188,17 @@ class BST:
                 self.__remove_node_2_2(node)
             else:
                 # 情况（3）有两个叶子节点的节点
-                pass
+                min_node = node.right 
+                while min_node.left:
+                    #即：初始化右子树最小节点为当前要删除节点的右节点不断判断其是否有左节点(左节点一定比他小！)，这样一直找到最后，就能找到右子树的最小节点
+                    min_node = min_node.left # 先找右子树最小的节点
+                node.val = min_node.val #用右子树最小节点替换要删除的节点
+                # 删除min_node，只有两种情况(min_node是叶子节点或者只有右孩子节点)
+                if min_node.left: #min_node只有右孩子节点
+                    self.__remove_node_2_2(min_node)
+                else: #min_node是叶子节点
+                    self.__remove_node_1(min_node)
+                
 
 
 
@@ -203,4 +213,8 @@ if __name__ == '__main__':
     tree = BST(li)
     # print(tree.root.val)
     # tree.in_order(tree.root)
-    print(tree.query_(3))
+    # print(tree.query_(3))
+    print(tree.in_order(tree.root))
+    tree.delete(10) #成功删除10
+    print('')
+    tree.in_order(tree.root)
