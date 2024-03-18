@@ -15,10 +15,28 @@ def BubbleSort(li):
                 li[j], li[j+1] = li[j+1], li[j]
     return li
 
+# (二) 插入排序(Insertion Sort)
+## 时间复杂度：O(n^2)
+def InsertionSort(li):
+    """
+    插入排序
+    有序指针i往右移动，无序指针j往左移动
+    """
+    for i in range(1, len(li)):
+        # i表示无序序列第一个
+        tmp = li[i]
+        j = i - 1 #j表示有序序列最后一个
+        while j >=0 and li[j] > tmp:
+            li[j+1] = li[j]
+            j -= 1
+        li[j+1] = tmp #指针移动结束，插入tmp
+    return li
 
 if __name__ == "__main__":
     import random
     li = [random.randint(0,30) for _ in range(30)]
     print(li)
-    print("冒泡排序")
-    print(BubbleSort(li))
+    # print("冒泡排序")
+    # print(BubbleSort(li))
+    print("插入排序")
+    print(InsertionSort(li))
