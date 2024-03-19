@@ -3,3 +3,4 @@
 ## 1/21 Binary Search Tree
 ## 3/12 Hash Table
 ## 3/19 Stack
+## 3/19 Queue
