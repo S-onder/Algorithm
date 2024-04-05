@@ -48,9 +48,44 @@ class MultiHeadAttention(nn.Module):
         score = score.permute(0, 2, 1, 3).reshape(batch_size, seq_len, d_model) # (batch_size, seq_len, d_model)
         return score, atten 
     
+class BatchNorm(nn.Module):
+    """Batch Normalization"""
+    def __init__(self, d_model, eps = 1e-6, training = True):
+        super(BatchNorm, self).__init__()
+        self.eps = eps
+        self.training = training
+        self.gamma = nn.Parameter(torch.ones(d_model))
+        self.beta = nn.Parameter(torch.zeros(d_model))
+
+    def forward(self, x):
+        if self.is_training:
+            mean = x.mean(dim = 0, keepdim = True)
+            var = x.var(dim = 0, keepdim = True)
+            x = (x - mean) / torch.sqrt(var + self.eps)
+        y = self.gamma * x + self.beta
+        return y
+        
+class LayerNorm(nn.Module):
+    """Layer Normalization"""
+    def __init__(self, d_model, eps = 1e-6):
+        super(LayerNorm, self).__init__()
+        self.eps = eps
+        self.gamma = nn.Parameter(torch.ones(d_model))
+        self.beta = nn.Parameter(torch.zeros(d_model))
+    
+    def forward(self, x):
+        mean = x.mean(dim = -1, keepdim = True)
+        var = x.var(dim = -1, keepdim = True)
+        x = (x - mean) / torch.sqrt(var + self.eps)
+        y = self.gamma * x + self.beta
+        return y
 
 if __name__ == '__main__':
     x = torch.randn(2, 4, 512) #batch=2,seq=4,d_model=512
-    self_atten = SelfAttention(512)
-    score, atten = self_atten(x)
-    print(atten.sum(dim = -1))
+    # self_atten = SelfAttention(512)
+    # score, atten = self_atten(x)
+    # print(atten.sum(dim = -1))
+    linear = nn.Linear(512, 512, bias=True)
+    print(linear.weight.shape)
+    print(linear.bias.shape)
+    print(linear(x).shape)   
