@@ -47,7 +47,8 @@ class MultiHeadAttention(nn.Module):
         score = torch.matmul(atten, v) # (batch_size, n_head, seq_len, head_dim)
         score = score.permute(0, 2, 1, 3).reshape(batch_size, seq_len, d_model) # (batch_size, seq_len, d_model)
         return score, atten 
-    
+
+ # Normalization层   
 class BatchNorm(nn.Module):
     """Batch Normalization"""
     def __init__(self, d_model, eps = 1e-6, training = True):
@@ -79,6 +80,25 @@ class LayerNorm(nn.Module):
         x = (x - mean) / torch.sqrt(var + self.eps)
         y = self.gamma * x + self.beta
         return y
+    
+#AUC计算
+def calculate_auc(y_true, y_scores):
+    # 初始化变量
+    pos = sum(y_true)
+    neg = len(y_true) - pos
+    auc = 0
+    rank_sum = 0
+
+    # 对预测分数和真实标签进行排序
+    data = sorted(zip(y_scores, y_true), key=lambda x: x[0])
+
+    # 计算AUC
+    for i in range(len(data)):
+        if data[i][1] == 1:
+            rank_sum += i + 1
+    auc = (rank_sum - (pos*(pos+1))/2) / (pos*neg)
+
+    return auc
 
 if __name__ == '__main__':
     x = torch.randn(2, 4, 512) #batch=2,seq=4,d_model=512
