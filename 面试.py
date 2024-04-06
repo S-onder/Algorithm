@@ -105,7 +105,24 @@ if __name__ == '__main__':
     # self_atten = SelfAttention(512)
     # score, atten = self_atten(x)
     # print(atten.sum(dim = -1))
-    linear = nn.Linear(512, 512, bias=True)
-    print(linear.weight.shape)
-    print(linear.bias.shape)
-    print(linear(x).shape)   
+    # linear = nn.Linear(512, 512, bias=True)
+    # print(linear.weight.shape)
+    # print(linear.bias.shape)
+    # print(linear(x).shape)   
+    import numpy as np
+    import random
+    import time
+    from sklearn.metrics import roc_auc_score
+    y_true = np.random.choice([0, 1], size=10000, p=[0.7, 0.3])
+    y_pred = np.random.uniform(0, 1, 10000)
+    # 计算并打印roc_auc_score的执行时间
+    start = time.time()
+    sklearn_auc = roc_auc_score(y_true, y_pred)
+    end = time.time()
+    print(f'roc_auc_score execution time: {end - start}, result : {sklearn_auc}')
+
+    # 计算并打印calculate_auc的执行时间
+    start = time.time()
+    my_auc = calculate_auc(y_true, y_pred)
+    end = time.time()
+    print(f'calculate_auc execution time: {end - start}, result : {my_auc}')
