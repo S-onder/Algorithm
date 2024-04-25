@@ -4,3 +4,4 @@
 ## 3/12 Hash Table
 ## 3/19 Stack
 ## 3/19 Queue
+## 4/25 Quick Sort
