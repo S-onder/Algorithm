@@ -1,5 +1,26 @@
 # 排序算法
 
+# (零) 二分查找
+
+def binary_search(nums, target):
+    """
+    二分查找
+    nums : 有序列表
+    target : 目标值
+    """
+    left, right = 0, len(nums) - 1
+    while left <= right:
+        #当左指针小于等于右指针时
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1 #找不到的情况
+
+
 # (一) 冒泡排序(Bubble Sort)
 ## 时间复杂度：O(n^2)
 def BubbleSort(li):
@@ -48,29 +69,29 @@ def InsertionSort(li):
 #         QuickSort(data, mid+1, right) #右边递归归位
 
 
-def partition(li, left, right):
-    tmp = li[left] #从左边开始拿出一个数字进行归为
+def partition(nums, left, right):
+    """
+    快速排序的归位过程
+    """
+    tmp = nums[left] #将左面第一个数字进行归为，暂存第一个数字
     while left < right:
-        # 只要当前两个指针范围存在不止一个数，就进行
-        while left < right and li[right] >= tmp:
-            # 当右指针指向的数大于tmp时，右指针左移
-            right -= 1
-            # print('right:', right)
-        li[left] = li[right] #将右指针指向的数放到左空位置
-        while left < right and li[left] <= tmp:
-            # 当左指针指向的数小于tmp时，左指针右移
-            left += 1
-            # print('left:', left)
-        li[right] = li[left] #将左指针指向的数放到右空位置
-    li[left] = tmp #将tmp放到归位
-    return left #返回归位的位置
+        #指针不重合就进行
+        while left < right and nums[right] >= tmp:
+            right -= 1 #从右面开始找，直到找到一个小于tmp的位置
+        nums[left] = nums[right] #将该位置放到左面
+        while left < right and nums[left] <= tmp:
+            left += 1 #接着从左面找，直到找到一个大于tmp的位置
+        nums[right] = nums[left] #将该位置放到右面  
+    nums[left] = tmp #将tmp放到中间位置 当left = right时，将tmp放到中间位置
+    return left
 
 
-def QuickSort(li,left, right):
+
+def QuickSort(nums,left, right):
     if left < right:
-        mid = partition(li, left, right)
-        QuickSort(li, left, mid-1)
-        QuickSort(li, mid+1, right)
+        mid = partition(nums, left, right)
+        QuickSort(nums, left, mid-1)
+        QuickSort(nums, mid+1, right)
 
 
         
